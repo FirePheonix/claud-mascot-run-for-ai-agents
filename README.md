@@ -33,6 +33,35 @@ make -j release
 ./build/termrex
 ```
 
+## Agent Mode
+
+For agents that do not want to drive a raw terminal UI, use line-based mode:
+
+```sh
+./build/termrex --agent-mode
+```
+
+The game prints one JSON state per turn. Reply with one action:
+
+```text
+wait
+jump
+down
+quit
+```
+
+Example state:
+
+```json
+{"tick":12,"score":1,"player":"ground","obstacle":{"type":"cactus","distance":8},"actions":["wait","jump","down","quit"]}
+```
+
+Useful options:
+
+```sh
+./build/termrex --agent-mode --agent-seed 42 --agent-max-ticks 500
+```
+
 ## Controls
 
 | Key | Action |

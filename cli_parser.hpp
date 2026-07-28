@@ -15,6 +15,9 @@ struct GameSettings {
   bool obstacleDino_ = true;
   int keyRepeat_ = 200;
   bool skipIntro_ = false;
+  bool agentMode_ = false;
+  int agentSeed_ = 7;
+  int agentMaxTicks_ = 300;
 };
 
 inline void printHelp() {
@@ -32,7 +35,13 @@ inline void printHelp() {
             << "    --keyrepeat <ms>         Set custom key repeat delay in "
             << "milliseconds\n"
             << "    --skip-intro             Skip the intro screen and start "
-            << "game immediately\n";
+            << "game immediately\n"
+            << "    --agent-mode             Use line-based stdin/stdout mode "
+            << "for agents\n"
+            << "    --agent-seed <n>         Set agent-mode obstacle seed "
+            << "(default 7)\n"
+            << "    --agent-max-ticks <n>    Stop agent mode after this many "
+            << "ticks (default 300)\n";
 }
 
 inline void printVersion() {
@@ -49,6 +58,9 @@ inline GameSettings parseArguments(int argc, char* argv[]) {
       {"no-obstacle-dino", no_argument, 0, 0},
       {"keyrepeat", required_argument, 0, 0},
       {"skip-intro", no_argument, 0, 0},
+      {"agent-mode", no_argument, 0, 0},
+      {"agent-seed", required_argument, 0, 0},
+      {"agent-max-ticks", required_argument, 0, 0},
       {0, 0, 0, 0}};
 
   int optionIndex = 0;
@@ -72,6 +84,20 @@ inline GameSettings parseArguments(int argc, char* argv[]) {
         settings.obstacleDino_ = false;
       } else if (optname == "skip-intro") {
         settings.skipIntro_ = true;
+      } else if (optname == "agent-mode") {
+        settings.agentMode_ = true;
+      } else if (optname == "agent-seed") {
+        if (optarg) {
+          settings.agentSeed_ = std::stoi(optarg);
+        }
+      } else if (optname == "agent-max-ticks") {
+        if (optarg) {
+          settings.agentMaxTicks_ = std::stoi(optarg);
+          if (settings.agentMaxTicks_ < 1) {
+            std::cerr << "Error: --agent-max-ticks must be positive.\n";
+            exit(1);
+          }
+        }
       } else if (optname == "keyrepeat") {
         if (optarg) {
           try {

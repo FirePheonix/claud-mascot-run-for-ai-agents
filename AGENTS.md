@@ -9,6 +9,14 @@ make -j release
 ./build/termrex
 ```
 
+If raw terminal control is annoying, use agent mode:
+
+```sh
+./build/termrex --agent-mode
+```
+
+Read the JSON state, then reply with `wait`, `jump`, `down`, or `quit`.
+
 Controls:
 
 - `SPACE` / `UP`: jump
