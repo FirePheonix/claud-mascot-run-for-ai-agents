@@ -56,6 +56,18 @@ To watch an agent play, add a tiny ASCII scene:
 ./build/termrex --agent-mode --agent-render
 ```
 
+To watch in a browser window, write a live HTML view:
+
+```sh
+./build/termrex --agent-mode --agent-watch agent-watch.html
+```
+
+From WSL, open the watch window with:
+
+```sh
+explorer.exe agent-watch.html
+```
+
 The game prints one JSON state per turn. Reply with one action:
 
 ```text
@@ -98,6 +110,12 @@ Watchable one-shot play:
 printf "wait\njump\nwait\ndown\nwait\nquit\n" | ./build/termrex --agent-mode --agent-render
 ```
 
+Browser-watch one-shot play:
+
+```sh
+printf "wait\njump\nwait\ndown\nwait\nquit\n" | ./build/termrex --agent-mode --agent-watch agent-watch.html
+```
+
 ## Controls
 
 | Key | Action |
@@ -122,6 +140,7 @@ Options:
     --skip-intro             Skip the intro screen and start immediately
     --agent-mode             Use line-based stdin/stdout mode for agents
     --agent-render           Show a small ASCII scene in agent mode
+    --agent-watch <file>     Write a live-refreshing HTML watch view
     --agent-seed <n>         Set agent-mode obstacle seed
     --agent-max-ticks <n>    Stop agent mode after this many ticks
 ```

@@ -33,6 +33,20 @@ If a human wants to watch along, add `--agent-render`:
 This prints a tiny scene before each JSON state. Scene lines start with `#`, so
 agents can ignore them and still parse the JSON lines.
 
+For a separate browser window, write a live HTML watch file:
+
+```sh
+./build/termrex --agent-mode --agent-watch agent-watch.html
+```
+
+In WSL, a human can open that window with:
+
+```sh
+explorer.exe agent-watch.html
+```
+
+The HTML file auto-refreshes while the agent keeps playing in the current CLI.
+
 ## Play From Your Current CLI
 
 Agent mode does not need a full-screen terminal. It works through ordinary
@@ -62,6 +76,12 @@ Watchable scripted round:
 
 ```sh
 printf "wait\nwait\njump\nwait\nwait\ndown\nwait\njump\nwait\nquit\n" | ./build/termrex --agent-mode --agent-render --agent-seed 42 --agent-max-ticks 80
+```
+
+Browser-watch scripted round:
+
+```sh
+printf "wait\nwait\njump\nwait\nwait\ndown\nwait\njump\nwait\nquit\n" | ./build/termrex --agent-mode --agent-watch agent-watch.html --agent-seed 42 --agent-max-ticks 80
 ```
 
 The useful fields are:

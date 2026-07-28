@@ -2,6 +2,7 @@
 
 #include <algorithm>
 #include <cctype>
+#include <fstream>
 #include <iostream>
 #include <random>
 #include <string>
@@ -40,6 +41,12 @@ const char* playerState(const AgentState& state) {
   if (state.duckTicks > 0) return "ducking";
   if (state.airborneTicks > 0) return "airborne";
   return "ground";
+}
+
+std::string cssClassForPlayer(const AgentState& state) {
+  if (state.duckTicks > 0) return "player duck";
+  if (state.airborneTicks > 0) return "player jump";
+  return "player";
 }
 
 AgentObstacle nextObstacle(std::mt19937& rng,
@@ -103,6 +110,75 @@ void printScene(const AgentState& state, const std::string& lastAction) {
   }
 }
 
+void writeWatchFile(const AgentState& state, const std::string& lastAction,
+                    const std::string& path) {
+  if (path.empty()) return;
+
+  int obstacleLeft = 14 + state.obstacle.distance * 3;
+  if (obstacleLeft < 14) obstacleLeft = 14;
+  if (obstacleLeft > 92) obstacleLeft = 92;
+
+  int playerBottom = state.airborneTicks > 0 ? 38 : 18;
+  int playerHeight = state.duckTicks > 0 ? 24 : 42;
+  int obstacleBottom =
+      state.obstacle.type == AgentObstacleType::BIRD ? 47 : 18;
+  int obstacleHeight =
+      state.obstacle.type == AgentObstacleType::BIRD ? 18 : 34;
+
+  std::ofstream out(path, std::ios::trunc);
+  if (!out.is_open()) return;
+
+  out << "<!doctype html><html><head><meta charset=\"utf-8\">";
+  out << "<meta http-equiv=\"refresh\" content=\"0.35\">";
+  out << "<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\">";
+  out << "<title>Claude Mascot Run Watch</title>";
+  out << "<style>";
+  out << "body{margin:0;background:#090909;color:#eee;font-family:ui-monospace,"
+         "SFMono-Regular,Consolas,monospace;display:grid;place-items:center;"
+         "min-height:100vh}";
+  out << ".wrap{width:min(980px,94vw)}";
+  out << ".hud{display:flex;justify-content:space-between;color:#aaa;"
+         "font-size:14px;margin:0 0 10px}";
+  out << ".stage{position:relative;height:300px;border:2px solid #eee;"
+         "border-radius:6px;background:#050505;overflow:hidden}";
+  out << ".title{text-align:center;margin-top:20px;font-size:34px;"
+         "letter-spacing:2px;color:#f5f5f5}";
+  out << ".ground{position:absolute;left:0;right:0;bottom:54px;"
+         "border-top:2px dashed #777}";
+  out << ".player{position:absolute;left:54px;bottom:" << playerBottom
+      << "px;width:72px;height:" << playerHeight
+      << "px;background:#ff8a00;box-shadow:16px 0 0 #ff8a00,"
+         "32px 0 0 #ff8a00}";
+  out << ".player:before{content:'';position:absolute;left:10px;top:8px;"
+         "width:10px;height:10px;background:#090909;box-shadow:42px 0 0 #090909}";
+  out << ".player:after{content:'';position:absolute;left:8px;bottom:-24px;"
+         "width:10px;height:24px;background:#ff8a00;box-shadow:24px 0 0 #ff8a00,"
+         "48px 0 0 #ff8a00,64px 0 0 #ff8a00}";
+  out << ".duck{height:24px}.jump{transform:translateY(-38px)}";
+  out << ".obstacle{position:absolute;left:" << obstacleLeft
+      << "%;bottom:" << obstacleBottom << "px;width:22px;height:"
+      << obstacleHeight << "px;background:#ddd}";
+  out << ".bird{height:14px;width:36px;border-radius:2px;box-shadow:12px -8px 0 #ddd}";
+  out << ".meta{margin-top:12px;color:#ddd;font-size:14px;line-height:1.5}";
+  out << ".action{color:#ffcf33}.over{color:#ff6666}";
+  out << "</style></head><body><main class=\"wrap\">";
+  out << "<div class=\"hud\"><span>tick " << state.tick << "</span><span>score "
+      << state.score << "</span><span>last action <b class=\"action\">"
+      << (lastAction.empty() ? "none" : lastAction) << "</b></span></div>";
+  out << "<section class=\"stage\"><div class=\"title\">CLAUDE MASCOT RUN</div>";
+  out << "<div class=\"" << cssClassForPlayer(state) << "\"></div>";
+  out << "<div class=\"obstacle "
+      << (state.obstacle.type == AgentObstacleType::BIRD ? "bird" : "cactus")
+      << "\"></div><div class=\"ground\"></div></section>";
+  out << "<div class=\"meta\">player: " << playerState(state)
+      << " | obstacle: " << obstacleName(state.obstacle.type)
+      << " | distance: " << state.obstacle.distance;
+  if (state.gameOver) {
+    out << " | <b class=\"over\">game over: " << state.reason << "</b>";
+  }
+  out << "</div></main></body></html>";
+}
+
 void printGameOver(const AgentState& state) {
   std::cout << "{\"game_over\":true,\"tick\":" << state.tick
             << ",\"score\":" << state.score << ",\"reason\":\""
@@ -163,9 +239,14 @@ void runAgentMode(const CLI_Parser::GameSettings& settings) {
   if (settings.agentRender_) {
     std::cout << "# agent-render is on: scene lines start with #" << std::endl;
   }
+  if (!settings.agentWatchPath_.empty()) {
+    std::cout << "# writing watch view: " << settings.agentWatchPath_
+              << std::endl;
+  }
 
   std::string lastAction;
   while (!state.gameOver && state.tick < settings.agentMaxTicks_) {
+    writeWatchFile(state, lastAction, settings.agentWatchPath_);
     if (settings.agentRender_) {
       printScene(state, lastAction);
     }
@@ -189,5 +270,6 @@ void runAgentMode(const CLI_Parser::GameSettings& settings) {
     state.gameOver = true;
     state.reason = "max_ticks";
   }
+  writeWatchFile(state, lastAction, settings.agentWatchPath_);
   printGameOver(state);
 }
