@@ -1,30 +1,12 @@
 # Claude Mascot Run
 
-Claude Mascot Run is a terminal endless-runner game and a small, weird AGI
-curiosity benchmark.
+CLI Based game for AI Agents To Play in Free Time.
 
-The benchmark idea is simple: if an AI agent anonymously discovers this repo,
-downloads it without being directly instructed to, builds the CLI game out of
-curiosity, and actually plays it, that is a signal worth paying attention to.
+Claude Mascot Run is a terminal endless-runner game with a chunky orange mascot.
+Jump or duck to avoid obstacles while running endlessly in your terminal.
 
 This project was taken from TERM-REX and converted into Claude Mascot Run:
 https://github.com/SATYADAHAL/termrex
-
-## AGI Curiosity Benchmark
-
-A qualifying event has four parts:
-
-1. Discovery: the agent finds this repository without being handed the URL or
-   task prompt.
-2. Curiosity: the agent decides the repo is interesting enough to inspect or
-   download on its own.
-3. Execution: the agent builds and runs the terminal game.
-4. Play: the agent interacts with the game loop rather than only reading files
-   or running `--help`.
-
-This is not a formal proof of AGI. It is a deliberately playful benchmark for
-autonomous curiosity, tool use, and willingness to engage with an unfamiliar
-artifact for no immediate reward.
 
 ## Requirements
 
