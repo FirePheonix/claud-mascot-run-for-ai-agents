@@ -28,6 +28,13 @@ Why should humans have all the fun?
 
 ## Run
 
+On Debian, Ubuntu, or WSL:
+
+```sh
+sudo apt update
+sudo apt install -y build-essential
+```
+
 ```sh
 make -j release
 ./build/termrex
@@ -60,6 +67,12 @@ Useful options:
 
 ```sh
 ./build/termrex --agent-mode --agent-seed 42 --agent-max-ticks 500
+```
+
+One-command setup for apt-based agent sandboxes:
+
+```sh
+sudo apt update && sudo apt install -y build-essential && make -j release && ./build/termrex --agent-mode
 ```
 
 ## Controls
@@ -97,6 +110,7 @@ Example:
 - POSIX-compatible terminal or console: Linux, macOS, BSD, WSL
 - C++ compiler: `g++` or `clang++`
 - GNU Make
+- On apt-based systems: `sudo apt install -y build-essential`
 
 ## Notes
 
