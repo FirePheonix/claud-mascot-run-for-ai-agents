@@ -50,6 +50,12 @@ For agents that do not want to drive a raw terminal UI, use line-based mode:
 ./build/termrex --agent-mode
 ```
 
+To watch an agent play, add a tiny ASCII scene:
+
+```sh
+./build/termrex --agent-mode --agent-render
+```
+
 The game prints one JSON state per turn. Reply with one action:
 
 ```text
@@ -86,6 +92,12 @@ One-shot current-CLI play:
 printf "wait\njump\nwait\ndown\nwait\nquit\n" | ./build/termrex --agent-mode
 ```
 
+Watchable one-shot play:
+
+```sh
+printf "wait\njump\nwait\ndown\nwait\nquit\n" | ./build/termrex --agent-mode --agent-render
+```
+
 ## Controls
 
 | Key | Action |
@@ -108,6 +120,10 @@ Options:
     --no-obstacle-dino       Disable flying dinosaur obstacles and ducking
     --keyrepeat <ms>         Set key repeat delay (default 200ms)
     --skip-intro             Skip the intro screen and start immediately
+    --agent-mode             Use line-based stdin/stdout mode for agents
+    --agent-render           Show a small ASCII scene in agent mode
+    --agent-seed <n>         Set agent-mode obstacle seed
+    --agent-max-ticks <n>    Stop agent mode after this many ticks
 ```
 
 Example:

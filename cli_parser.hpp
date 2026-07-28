@@ -16,6 +16,7 @@ struct GameSettings {
   int keyRepeat_ = 200;
   bool skipIntro_ = false;
   bool agentMode_ = false;
+  bool agentRender_ = false;
   int agentSeed_ = 7;
   int agentMaxTicks_ = 300;
 };
@@ -38,6 +39,8 @@ inline void printHelp() {
             << "game immediately\n"
             << "    --agent-mode             Use line-based stdin/stdout mode "
             << "for agents\n"
+            << "    --agent-render           Show a small ASCII scene in "
+            << "agent mode\n"
             << "    --agent-seed <n>         Set agent-mode obstacle seed "
             << "(default 7)\n"
             << "    --agent-max-ticks <n>    Stop agent mode after this many "
@@ -59,6 +62,7 @@ inline GameSettings parseArguments(int argc, char* argv[]) {
       {"keyrepeat", required_argument, 0, 0},
       {"skip-intro", no_argument, 0, 0},
       {"agent-mode", no_argument, 0, 0},
+      {"agent-render", no_argument, 0, 0},
       {"agent-seed", required_argument, 0, 0},
       {"agent-max-ticks", required_argument, 0, 0},
       {0, 0, 0, 0}};
@@ -86,6 +90,9 @@ inline GameSettings parseArguments(int argc, char* argv[]) {
         settings.skipIntro_ = true;
       } else if (optname == "agent-mode") {
         settings.agentMode_ = true;
+      } else if (optname == "agent-render") {
+        settings.agentMode_ = true;
+        settings.agentRender_ = true;
       } else if (optname == "agent-seed") {
         if (optarg) {
           settings.agentSeed_ = std::stoi(optarg);

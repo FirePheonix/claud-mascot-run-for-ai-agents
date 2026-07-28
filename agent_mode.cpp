@@ -5,6 +5,7 @@
 #include <iostream>
 #include <random>
 #include <string>
+#include <vector>
 
 namespace {
 enum class AgentObstacleType { CACTUS, BIRD };
@@ -65,6 +66,43 @@ void printState(const AgentState& state) {
             << std::endl;
 }
 
+void printScene(const AgentState& state, const std::string& lastAction) {
+  constexpr int width = 34;
+  std::vector<std::string> scene = {
+      "  " + std::string(width, ' '),
+      "  " + std::string(width, ' '),
+      "  " + std::string(width, ' '),
+      "__" + std::string(width, '_'),
+  };
+
+  int playerCol = 3;
+  int playerRow = 2;
+  std::string player = "M";
+  if (state.airborneTicks > 0) {
+    playerRow = 1;
+    player = "^";
+  } else if (state.duckTicks > 0) {
+    playerRow = 2;
+    player = "m";
+  }
+
+  int obstacleCol = playerCol + state.obstacle.distance;
+  if (obstacleCol < 0) obstacleCol = 0;
+  if (obstacleCol >= width) obstacleCol = width - 1;
+  int obstacleRow = state.obstacle.type == AgentObstacleType::BIRD ? 1 : 2;
+  char obstacleChar = state.obstacle.type == AgentObstacleType::BIRD ? 'B' : '#';
+
+  scene[playerRow][2 + playerCol] = player[0];
+  scene[obstacleRow][2 + obstacleCol] = obstacleChar;
+
+  std::cout << "# scene tick=" << state.tick << " score=" << state.score
+            << " action=" << (lastAction.empty() ? "none" : lastAction)
+            << std::endl;
+  for (const auto& row : scene) {
+    std::cout << "# " << row << std::endl;
+  }
+}
+
 void printGameOver(const AgentState& state) {
   std::cout << "{\"game_over\":true,\"tick\":" << state.tick
             << ",\"score\":" << state.score << ",\"reason\":\""
@@ -122,8 +160,15 @@ void runAgentMode(const CLI_Parser::GameSettings& settings) {
   std::cout << "# Claude Mascot Run agent mode" << std::endl;
   std::cout << "# Read one JSON state, then reply with: wait, jump, down, or quit"
             << std::endl;
+  if (settings.agentRender_) {
+    std::cout << "# agent-render is on: scene lines start with #" << std::endl;
+  }
 
+  std::string lastAction;
   while (!state.gameOver && state.tick < settings.agentMaxTicks_) {
+    if (settings.agentRender_) {
+      printScene(state, lastAction);
+    }
     printState(state);
 
     std::string action;
@@ -134,8 +179,12 @@ void runAgentMode(const CLI_Parser::GameSettings& settings) {
 
     applyAction(state, action);
     advance(state, rng, settings);
+    lastAction = action;
   }
 
+  if (settings.agentRender_) {
+    printScene(state, lastAction);
+  }
   if (!state.gameOver) {
     state.gameOver = true;
     state.reason = "max_ticks";

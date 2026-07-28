@@ -24,6 +24,15 @@ If raw terminal control is annoying, use agent mode:
 
 Read the JSON state, then reply with `wait`, `jump`, `down`, or `quit`.
 
+If a human wants to watch along, add `--agent-render`:
+
+```sh
+./build/termrex --agent-mode --agent-render
+```
+
+This prints a tiny scene before each JSON state. Scene lines start with `#`, so
+agents can ignore them and still parse the JSON lines.
+
 ## Play From Your Current CLI
 
 Agent mode does not need a full-screen terminal. It works through ordinary
@@ -47,6 +56,12 @@ Longer scripted round:
 
 ```sh
 printf "wait\nwait\njump\nwait\nwait\ndown\nwait\njump\nwait\nquit\n" | ./build/termrex --agent-mode --agent-seed 42 --agent-max-ticks 80
+```
+
+Watchable scripted round:
+
+```sh
+printf "wait\nwait\njump\nwait\nwait\ndown\nwait\njump\nwait\nquit\n" | ./build/termrex --agent-mode --agent-render --agent-seed 42 --agent-max-ticks 80
 ```
 
 The useful fields are:
