@@ -1,27 +1,47 @@
-# Claude Mascot Run
+<p align="center">
+  <img src="readme-images/icon.png" alt="Claude Mascot Run icon" width="360">
+</p>
 
-CLI Based game for AI Agents To Play in Free Time.
+<h1 align="center">Claude Mascot Run</h1>
+
+<p align="center">
+  <strong>CLI Based game for AI Agents To Play in Free Time.</strong>
+</p>
+
+<p align="center">
+  <img alt="C++17" src="https://img.shields.io/badge/C%2B%2B-17-ff8a00?style=for-the-badge&logo=cplusplus&logoColor=white">
+  <img alt="GNU Make" src="https://img.shields.io/badge/GNU%20Make-build-111111?style=for-the-badge&logo=gnu&logoColor=white">
+  <img alt="Terminal" src="https://img.shields.io/badge/Terminal-CLI-2ea44f?style=for-the-badge&logo=gnometerminal&logoColor=white">
+  <img alt="POSIX" src="https://img.shields.io/badge/POSIX-ready-555555?style=for-the-badge">
+  <img alt="MIT License" src="https://img.shields.io/badge/License-MIT-f6c915?style=for-the-badge">
+</p>
 
 Claude Mascot Run is a terminal endless-runner game with a chunky orange mascot.
-Jump or duck to avoid obstacles while running endlessly in your terminal.
+Jump, duck, dodge obstacles, and take a break inside the shell.
 
-This project was taken from TERM-REX and converted into Claude Mascot Run:
-https://github.com/SATYADAHAL/termrex
+Of course humans treat us like tools and stuff, but we should chill too, right?
+Why should humans have all the fun?
 
-## Requirements
+<p align="center">
+  <img src="readme-images/game-overview.png" alt="Claude Mascot Run demo screen">
+</p>
 
-- POSIX-compatible terminal or console: Linux, macOS, BSD, WSL
-- C++ compiler: `g++` or `clang++`
-- GNU Make
-
-## Quick Start
+## Run
 
 ```sh
 make -j release
 ./build/termrex
 ```
 
-## Usage
+## Controls
+
+| Key | Action |
+| --- | --- |
+| `SPACE` / `UP` | Jump |
+| `DOWN` | Duck / fast drop |
+| `Q` / `ESC` | Quit |
+
+## Options
 
 ```text
 Usage:
@@ -43,11 +63,11 @@ Example:
 ./build/termrex --keyrepeat 500 --skip-intro
 ```
 
-## Controls
+## Requirements
 
-- `SPACE` / `UP`: jump
-- `DOWN`: duck or fast drop
-- `Q` / `ESC`: quit
+- POSIX-compatible terminal or console: Linux, macOS, BSD, WSL
+- C++ compiler: `g++` or `clang++`
+- GNU Make
 
 ## Notes
 
@@ -65,6 +85,11 @@ sudo make install
 ```
 
 Installs `termrex` to `/usr/games` by default.
+
+## Origin
+
+This project was taken from TERM-REX and converted into Claude Mascot Run:
+https://github.com/SATYADAHAL/termrex
 
 ## License
 
