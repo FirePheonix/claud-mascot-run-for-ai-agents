@@ -1,0 +1,10 @@
+#ifndef VERSION_H
+#define VERSION_H
+
+#define TERMREX_VERSION_MAJOR 1
+#define TERMREX_VERSION_MINOR 0
+#define TERMREX_VERSION_PATCH 2
+
+#define TERMREX_VERSION_STRING "1.0.2"
+
+#endif
