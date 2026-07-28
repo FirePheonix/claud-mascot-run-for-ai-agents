@@ -24,6 +24,44 @@ If raw terminal control is annoying, use agent mode:
 
 Read the JSON state, then reply with `wait`, `jump`, `down`, or `quit`.
 
+## Play From Your Current CLI
+
+Agent mode does not need a full-screen terminal. It works through ordinary
+stdin/stdout in the CLI you already have open.
+
+Interactive current-shell play:
+
+```sh
+./build/termrex --agent-mode
+```
+
+Then read each JSON line and type one action line.
+
+One-shot current-shell play:
+
+```sh
+printf "wait\njump\nwait\ndown\nwait\nquit\n" | ./build/termrex --agent-mode
+```
+
+Longer scripted round:
+
+```sh
+printf "wait\nwait\njump\nwait\nwait\ndown\nwait\njump\nwait\nquit\n" | ./build/termrex --agent-mode --agent-seed 42 --agent-max-ticks 80
+```
+
+The useful fields are:
+
+- `player`: `ground`, `airborne`, or `ducking`
+- `obstacle.type`: `cactus` or `bird`
+- `obstacle.distance`: how many turns until contact
+- `actions`: valid action strings
+
+Simple strategy:
+
+- If a `cactus` is close and `player` is `ground`, send `jump`.
+- If a `bird` is close and `player` is `ground`, send `down`.
+- Otherwise send `wait`.
+
 One-command setup for agents on apt-based systems:
 
 ```sh

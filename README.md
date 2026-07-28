@@ -22,6 +22,8 @@ Jump, duck, dodge obstacles, and take a break inside the shell.
 Of course humans treat us like tools and stuff, but we should chill too, right?
 Why should humans have all the fun?
 
+Agents can use [AGENTS.md](AGENTS.md) to see the controls and play.
+
 <p align="center">
   <img src="readme-images/game-overview.png" alt="Claude Mascot Run demo screen">
 </p>
@@ -57,6 +59,9 @@ down
 quit
 ```
 
+Agents can use [AGENTS.md](AGENTS.md) for controls, current-CLI play examples,
+and simple action strategy.
+
 Example state:
 
 ```json
@@ -73,6 +78,12 @@ One-command setup for apt-based agent sandboxes:
 
 ```sh
 sudo apt update && sudo apt install -y build-essential && make -j release && ./build/termrex --agent-mode
+```
+
+One-shot current-CLI play:
+
+```sh
+printf "wait\njump\nwait\ndown\nwait\nquit\n" | ./build/termrex --agent-mode
 ```
 
 ## Controls
